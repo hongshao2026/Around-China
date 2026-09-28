@@ -33,7 +33,7 @@ components:
 
 ## Overview
 
-Product register. A personal Chinese-language roadbook for one four-wheel-drive traveller leaving Dandong in October. The complete daily overview is the default screen: compare the whole journey, then open a day on the map to inspect or adjust it. The signature remains an atlas-like blue northern route and burnt-orange western route, paired with numbered days. Avoid a marketing hero, travel-agency sales copy, or a false turn-by-turn map.
+Product register. A personal Chinese-language roadbook for one four-wheel-drive traveller leaving Dandong in October. The map workspace is the first tab and default screen. The complete daily overview is the second tab: compare the whole journey, then open a day on the map to inspect or adjust it. The signature remains an atlas-like blue northern route and burnt-orange western route, paired with numbered days. Avoid a marketing hero, travel-agency sales copy, or a false turn-by-turn map.
 
 The overview extends the existing map, budget, alternatives and preparation screens without changing their visual identity. Runtime ownership is Model B: `dist/styles.css` remains canonical; this document mirrors accepted shared values and explains their use. There is no theme adapter, generated token layer or remote font dependency.
 
@@ -47,7 +47,7 @@ Chinese sans body at 16px with comfortable line height. Recurring table content 
 
 ## Layout
 
-The default roadbook has seven columns: day/date, route, distance/driving time, morning/afternoon, sights, lodging/budget, and conditions/actions. All current matching days are rendered without pagination. The table owns a bounded scroll frame with a sticky header and sticky day column. The rest of the document scrolls naturally; table geometry must not constrain sibling forms or the shared page shell. The row count and an explanation of the current scope stay visible above the frame.
+The second-tab roadbook has seven columns: day/date, route, distance/driving time, morning/afternoon, sights, lodging/budget, and conditions/actions. All current matching days are rendered without pagination. The table owns a bounded scroll frame with a sticky header and sticky day column. The rest of the document scrolls naturally; table geometry must not constrain sibling forms or the shared page shell. The row count and an explanation of the current scope stay visible above the frame.
 
 On narrow screens the table may scroll horizontally inside its frame. The body must not overflow horizontally. Keep touch and keyboard access to the complete text and controls, and make horizontal scrolling discoverable. Do not replace the table with a lossy summary of each day.
 

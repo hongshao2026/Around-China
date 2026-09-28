@@ -15,6 +15,9 @@ try {
  const page=await context.newPage(),errors=[];
  page.on('pageerror',error=>errors.push(String(error)));
  await page.goto(target,{waitUntil:'networkidle'});
+ assert.ok(await page.locator('#route-view').isVisible());
+ assert.deepEqual((await page.locator('.topbar [data-view]').allTextContents()).slice(0,2),['地图与行程','完整路书']);
+ await page.getByRole('button',{name:'完整路书',exact:true}).click();
  assert.ok(await page.locator('#roadbook-view').isVisible());
  assert.equal(await page.locator('[data-roadbook-row]').count(),147);
  assert.match(await page.title(),/完整路书/);
@@ -87,12 +90,14 @@ try {
  await printPage.goto(target,{waitUntil:'networkidle'});
  await printPage.evaluate(()=>localStorage.removeItem('border-roadbook-v1'));
  await printPage.goto(target,{waitUntil:'networkidle'});
+ await printPage.getByRole('button',{name:'完整路书',exact:true}).click();
  await printPage.emulateMedia({media:'print'});
  assert.equal(await printPage.locator('#roadbook-scroll').evaluate(el=>getComputedStyle(el).overflow),'visible');
  await printPage.pdf({path:resolve(output,'roadbook-print.pdf'),preferCSSPageSize:true,printBackground:true});
  // A missing map tile must not prevent reading the complete text table.
  const offline=await context.newPage();await offline.route('https://tile.openstreetmap.org/**',r=>r.abort());
  await offline.goto(target,{waitUntil:'networkidle'});
+ await offline.getByRole('button',{name:'完整路书',exact:true}).click();
  assert.equal(await offline.locator('[data-roadbook-row]').count(),147);
  assert.match(await offline.locator('[data-roadbook-row]').last().innerText(),/东兴/);
  assert.deepEqual(errors,[]);

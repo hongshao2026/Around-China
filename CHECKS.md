@@ -2,6 +2,8 @@
 
 Checked on 2026-09-28. These checks cover the website's calculations and behavior; they do not verify live road conditions, hotel inventory or surveyed route geometry.
 
+Navigation update: the map is the first tab and the default homepage; the complete roadbook is the second tab. The browser check now opens the map first, verifies tab order, and explicitly opens the roadbook before table, print and offline checks. Syntax, data, browser, strict audit and design lint checks were rerun successfully for this change (the same five design lint warnings remain).
+
 ## Automated checks
 
 | Command | Result |

@@ -1,6 +1,6 @@
 # 沿边慢行 interaction contract
 
-Source of business requirements: the user brief is for one driver, a four-wheel-drive vehicle, October departure, more than 90 days if needed, and accepted detours. The complete daily roadbook is the primary overview. Fuel powertrain is unspecified; the cost model defaults to an explicitly editable petrol assumption and also supports electricity. Visual identity and token ownership live in [DESIGN.md](DESIGN.md).
+Source of business requirements: the user brief is for one driver, a four-wheel-drive vehicle, October departure, more than 90 days if needed, and accepted detours. The map is the first tab and default homepage; the complete daily roadbook is the second tab. Fuel powertrain is unspecified; the cost model defaults to an explicitly editable petrol assumption and also supports electricity. Visual identity and token ownership live in [DESIGN.md](DESIGN.md).
 
 ## Canonical UI Map
 
@@ -18,7 +18,7 @@ Source of business requirements: the user brief is for one driver, a four-wheel-
 
 ## Navigation and dataset scope
 
-Navigation order is complete roadbook (`roadbook`, default), map and day detail (`route`), budget (`budget`), alternatives (`alternatives`), and preparation (`prepare`). Valid existing hash links retain their destination. Each view has a localized page title and visible active navigation state. Opening a day from the table uses the same selection action as the map and ledger, then reveals its map/detail view. Returning to the table preserves selected day and committed filters.
+Navigation order is map and day detail (`route`, default), complete roadbook (`roadbook`), budget (`budget`), alternatives (`alternatives`), and preparation (`prepare`). Valid existing hash links retain their destination, including direct `#roadbook` links. Each view has a localized page title and visible active navigation state. Opening a day from the table uses the same selection action as the map and ledger, then reveals its map/detail view. Returning to the table preserves selected day and committed filters.
 
 The roadbook renders every current matching day in one semantic, seven-column table without pagination: day/date; route and road; kilometres and pure driving hours; morning/afternoon; sights; lodging area and nightly estimate; conditions and available actions. Important text wraps in full. Selection controls use buttons rather than clickable table rows. Keyboard users can operate controls and the scroll frame.
 
@@ -50,4 +50,4 @@ External map tiles may fail; route markers, the complete table and daily text re
 
 ## Reconciled inherited documentation
 
-The source design context predates the complete overview. This revision intentionally makes the table the default while retaining the established map workflow and visual tokens. The copied ledger contract said 16 rows; the existing implementation uses 12, so the contract now records 12. Map dimensions and breakpoints are documented from the existing responsive CSS rather than the earlier approximate prose. No new theme or global palette change is introduced.
+The source design context predates the complete overview. The map remains the first tab and default homepage, with the complete table in the second tab, retaining both workflows and the established visual tokens. The copied ledger contract said 16 rows; the existing implementation uses 12, so the contract now records 12. Map dimensions and breakpoints are documented from the existing responsive CSS rather than the earlier approximate prose. No new theme or global palette change is introduced.
