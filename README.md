@@ -8,6 +8,8 @@
 
 ## 可以做什么
 
+- 首页是完整路书总览大表，一次列出全部当前行程；按路段筛选、搜索，点击天数返回当天地图与详情。
+- 总表包含日期、起终点、里程、驾驶时长、上下午安排、游玩、住宿区域与预算、当天提醒，支持打印当前表或保存为 PDF。
 - 点击每日行程和地图住宿点，查看起终点、估算里程、驾驶时长、上下午安排、游玩建议与住宿区域。
 - 调整出发日期、增加休整日，或将支持拆分的长驾驶日分成两天。
 - 选择冬季绕行方案，联动更新地图、日历和预算。
@@ -21,6 +23,7 @@
 - `dist/engine.js`：日期、拆分、绕行及预算计算。
 - `dist/app.js`、`dist/styles.css`、`dist/index.html`：交互、样式与页面。
 - `verify.mjs`：路线连续性、日期、预算等自动校验。
+- `qa-roadbook.mjs`：完整路书的浏览器交互、移动端、打印、无障碍与地图失败检查。
 - `.github/workflows/pages.yml`：更新 `main` 后先校验，再自动发布 `dist/` 到 GitHub Pages。
 
 本地预览（在仓库目录执行）：
@@ -34,6 +37,17 @@ python -m http.server 4173 --directory dist
 ```sh
 node verify.mjs
 ```
+
+可选浏览器验证：先启动本地静态服务，再安装测试依赖并运行（Node.js 22）：
+
+```sh
+npm install --no-save --package-lock=false playwright @axe-core/playwright
+npx playwright install chromium
+```
+
+将环境变量 `ROADBOOK_URL` 设为预览地址（例如 `http://localhost:4173/`），然后运行 `node qa-roadbook.mjs`。默认测试地址为 `http://127.0.0.1:4174/`，输出在忽略提交的 `qa-output/` 中。
+
+完整 CSV 始终导出全部当前行程，不受表格筛选影响；打印只包含当前显示的行程。新增休整、拆分和绕行都会同步更新表格。未分配机动天数不虚构为每日行程。
 
 ## 数据边界
 

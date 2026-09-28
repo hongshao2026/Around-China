@@ -8,3 +8,68 @@
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
 @media(forced-colors:active){*{scrollbar-color:auto}.choice.selected,.day-button.selected{outline:2px solid Highlight}.line,.map-stop{forced-color-adjust:none}}
 @media print{.topbar nav,.ledger-controls,.pager,.detail-actions,.detail-nav,.toast,footer,.date-control,.route-foot{display:none!important}.view[hidden]{display:none!important}.workspace{display:block;height:auto}.ledger{display:none}.map-panel{height:450px;margin-bottom:15px}.detail{max-height:none;overflow:visible}.summary{break-inside:avoid}body{background:white}.content-view{padding:0}.budget-layout{display:block}.budget-inputs{display:none}.panel{break-inside:avoid}}
+
+/* Complete roadbook: one semantic table, shared with the daily map view. */
+.roadbook-heading{gap:24px;margin-bottom:22px}
+.roadbook-heading h1{margin-top:5px}
+.roadbook-actions{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:9px;max-width:370px;padding-top:10px}
+.roadbook-actions button{font-size:14px;white-space:nowrap}
+.roadbook-actions button:first-child{background:var(--primary);border-color:var(--primary);color:var(--surface)}
+.roadbook-actions button:first-child:hover{background:var(--ink)}
+.roadbook-actions button:first-child:active{background:var(--accent)}
+.roadbook-toolbar{display:flex;flex-wrap:wrap;align-items:flex-end;gap:12px 18px;padding:16px 18px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:12px}
+.roadbook-field label{display:block;font-size:14px;color:var(--muted);margin-bottom:5px}
+.roadbook-field select,.roadbook-field input{height:42px;font-size:14px;width:100%}
+.roadbook-field{width:200px}
+.roadbook-search{width:280px}
+.roadbook-toolbar>button{height:42px;font-size:14px}
+#roadbook-count{font-size:14px;color:var(--muted);margin:0 0 8px auto;max-width:450px}
+.roadbook-help,.roadbook-foot{font-size:14px;color:var(--muted);line-height:1.7}
+.roadbook-help{margin:12px 0}
+.roadbook-scroll{position:relative;height:clamp(420px,72vh,850px);overflow:auto;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);scrollbar-gutter:stable;scroll-padding:65px 16px 20px 130px}
+.roadbook-scroll:focus-visible{outline-offset:2px}
+.roadbook-table{width:100%;min-width:1360px;border-collapse:separate;border-spacing:0;table-layout:fixed;font-size:14px;line-height:1.7}
+.roadbook-table .rb-date{width:8%}.roadbook-table .rb-route{width:12%}.roadbook-table .rb-drive{width:8%}.roadbook-table .rb-schedule{width:22%}.roadbook-table .rb-sights{width:14%}.roadbook-table .rb-stay{width:16%}.roadbook-table .rb-notes{width:20%}
+.roadbook-table th,.roadbook-table td{padding:17px 14px;vertical-align:top;text-align:left;border-bottom:1px solid var(--border);border-right:1px solid var(--border);overflow-wrap:anywhere}
+.roadbook-table tr>*:last-child{border-right:0}
+.roadbook-table thead th{position:sticky;top:0;z-index:3;background:var(--primary);color:var(--surface);font-weight:600;padding-top:15px;padding-bottom:15px;border-right-color:var(--muted)}
+.roadbook-table thead th:first-child{left:0;z-index:4}
+.roadbook-table tbody th{position:sticky;left:0;z-index:1;background:var(--surface);font-weight:400}
+.roadbook-table tbody tr.roadbook-rest,.roadbook-table tbody tr.roadbook-rest th{background:var(--background)}
+.roadbook-table tbody tr:hover,.roadbook-table tbody tr:hover th{background:var(--pale)}
+.roadbook-table time{display:block;white-space:nowrap;font:13px/1.8 var(--font-data);color:var(--muted);margin-top:7px}
+.roadbook-day{padding:5px 6px;border-color:var(--border);color:var(--primary);font:700 15px/1.6 var(--font-data);min-height:38px;white-space:nowrap}
+.roadbook-kind{display:block;color:var(--muted);font-size:13px;margin-top:6px}
+.roadbook-path{display:block;font-size:16px;line-height:1.6}
+.roadbook-path>span{display:block;color:var(--muted);font-weight:400;line-height:1.4}
+.roadbook-meta{display:block;color:var(--muted);font-size:13px;line-height:1.7;margin-top:7px}
+.roadbook-number{display:block;font:700 18px/1.8 var(--font-data);white-space:nowrap}
+.roadbook-number small{font:13px var(--font-body);color:var(--muted)}
+.roadbook-table td p{margin:0 0 12px}.roadbook-table td p:last-child{margin-bottom:0}
+.roadbook-table td p>b{display:block;color:var(--primary);margin-bottom:3px}
+.roadbook-price{display:block;font:14px/1.8 var(--font-data);color:var(--primary);margin-top:8px}
+.roadbook-hotel-link{display:inline-block;margin-top:9px;padding:3px 0}
+.roadbook-warning{color:var(--warning)}.roadbook-warning>strong{display:block;margin-bottom:5px}
+.roadbook-foot{display:flex;justify-content:space-between;gap:30px;margin-top:16px}
+.roadbook-foot p:first-child{flex-shrink:0;color:var(--ink)}.roadbook-foot p:last-child{max-width:720px}
+.roadbook-return{margin-top:15px;text-align:left}
+#roadbook-title{scroll-margin-top:20px}
+@media(max-width:1050px){.roadbook-heading{display:block}.roadbook-actions{max-width:none;justify-content:flex-start;padding-top:16px}.roadbook-foot{display:block}.topbar nav{gap:15px}.nav-item{white-space:nowrap}}
+@media(max-width:720px){.topbar nav{gap:10px;justify-content:flex-start;overflow-x:auto;max-width:100%;height:48px}.nav-item{flex-shrink:0;min-height:44px}.roadbook-heading{margin-bottom:18px}.roadbook-actions{gap:8px}.roadbook-actions button{font-size:13px}.roadbook-toolbar{padding:14px;gap:12px}.roadbook-field{width:100%}.roadbook-search{width:100%}#roadbook-count{margin:0;flex:1;min-width:150px}.roadbook-scroll{height:70vh;min-height:400px}.roadbook-help,.roadbook-foot{font-size:13px}.roadbook-foot p:first-child{font-size:14px}.roadbook-table{min-width:1360px}}
+@media print{
+ @page{size:A4 landscape;margin:10mm}
+ html,body{background:white;font-size:9pt;scroll-behavior:auto}
+ main{padding:0;max-width:none}.topbar{height:auto;padding:0 0 8px;border:0}.brand{margin:0}.brand strong{font-size:18pt}.roadmark,.brand small,.driver-badge,.intro,.season-note,.skip,.roadbook-help,.roadbook-actions,.roadbook-return{display:none!important}
+ .summary{gap:12px;margin-bottom:12px;padding-bottom:12px}.stat-value{font-size:18pt}.stat-value small,.stat-label,.stat-note{font-size:8pt}.stat .text-button{display:none}
+ .roadbook-heading{display:block;margin-bottom:8px}.roadbook-heading h1{font-size:20pt;margin:0 0 5px}.roadbook-heading p{font-size:9pt}.roadbook-heading .eyebrow{font-size:8pt}
+ .roadbook-toolbar{display:block;padding:0;border:0;margin:0 0 8px}.roadbook-toolbar .roadbook-field,.roadbook-toolbar>button{display:none!important}#roadbook-count{max-width:none;margin:0;font-size:9pt}
+ .roadbook-scroll{height:auto;min-height:0;max-height:none;overflow:visible;border:0;border-radius:0;scrollbar-gutter:auto}
+ .roadbook-table{width:100%;min-width:0;font-size:8pt;line-height:1.5;border-left:1px solid var(--border);border-top:1px solid var(--border)}
+ .roadbook-table thead{display:table-header-group}.roadbook-table tr{break-inside:avoid;page-break-inside:avoid}.roadbook-table th,.roadbook-table td{padding:7px 6px}
+ .roadbook-table thead th,.roadbook-table tbody th{position:static;background:white!important;color:var(--ink)}
+ .roadbook-table thead th{border-top:1px solid var(--border);border-right-color:var(--border)}
+ .roadbook-day{border:0;padding:0;min-height:0;font-size:9pt;background:none;color:var(--ink)}
+ .roadbook-table time,.roadbook-kind,.roadbook-meta,.roadbook-number small,.roadbook-price{font-size:8pt;white-space:normal}.roadbook-path,.roadbook-number{font-size:9pt}.roadbook-hotel-link{display:none}
+ .roadbook-table tbody tr,.roadbook-table tbody tr th{background:white!important}.roadbook-table td p{margin-bottom:6px}.roadbook-warning{color:var(--ink)}
+ .roadbook-foot{display:block;font-size:8pt;margin-top:10px}.roadbook-foot p{max-width:none!important;margin-bottom:5px}
+}

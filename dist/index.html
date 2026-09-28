@@ -2,24 +2,33 @@
 <html lang="zh-CN">
 <head>
  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
- <title>沿边慢行 · 丹东到东兴自驾路书</title>
+ <title>完整路书 · 沿边慢行</title>
  <meta name="description" content="单人四驱，十月从丹东出发。地图联动的331与219沿边行程，每日驾驶、住宿落脚点、冬季绕行和可调整预算。">
  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23224e76'/%3E%3Cpath d='M10 28V21Q10 17 16 16T22 11V4' fill='none' stroke='white' stroke-width='5'/%3E%3Ccircle cx='22' cy='5' r='4' fill='%23b44b24'/%3E%3C/svg%3E">
- <link rel="stylesheet" href="vendor/leaflet.css"><link rel="stylesheet" href="styles.css">
- <script defer src="vendor/leaflet.js"></script><script defer src="data.js"></script><script defer src="engine.js"></script><script defer src="app.js"></script>
+ <link rel="stylesheet" href="vendor/leaflet.css"><link rel="stylesheet" href="styles.css?v=roadbook-2">
+ <script defer src="vendor/leaflet.js"></script><script defer src="data.js"></script><script defer src="engine.js"></script><script defer src="app.js?v=roadbook-2"></script>
 </head>
 <body>
- <a class="skip" href="#day-detail">跳到当天行程</a>
+ <a class="skip" href="#roadbook-title">跳到完整路书</a>
  <header class="topbar">
-  <a class="brand" href="#route" aria-label="沿边慢行首页"><span class="roadmark" aria-hidden="true">↝</span><span><strong>沿边慢行</strong><small>丹东出发 · 东兴抵达</small></span></a>
-  <nav aria-label="主要页面"><button data-view="route" class="nav-item active" aria-current="page">地图与行程</button><button data-view="budget" class="nav-item">旅行预算</button><button data-view="alternatives" class="nav-item">绕行备选</button><button data-view="prepare" class="nav-item">出发准备</button></nav>
+  <a class="brand" href="#roadbook" data-open="roadbook" aria-label="沿边慢行首页"><span class="roadmark" aria-hidden="true">↝</span><span><strong>沿边慢行</strong><small>丹东出发 · 东兴抵达</small></span></a>
+  <nav aria-label="主要页面"><button data-view="roadbook" class="nav-item active" aria-current="page">完整路书</button><button data-view="route" class="nav-item">地图与行程</button><button data-view="budget" class="nav-item">旅行预算</button><button data-view="alternatives" class="nav-item">绕行备选</button><button data-view="prepare" class="nav-item">出发准备</button></nav>
   <span class="driver-badge">1名司机 <span>／</span> 四驱</span>
  </header>
  <main>
   <div class="intro"><div><span class="highway blue">G331</span><span class="join">×</span><span class="highway orange">G219</span><span class="intro-note">沿边走，累了就停。</span></div><div class="date-control"><label for="departure">出发日期</label><input id="departure" type="date" value="2026-10-01" aria-describedby="date-error"><span id="date-error" class="field-error"></span></div></div>
   <div id="summary" class="summary" aria-label="行程总览"></div>
   <div id="season-note" class="season-note"></div>
-  <section id="route-view" class="view" aria-label="地图与每日行程">
+  <section id="roadbook-view" class="view content-view" aria-labelledby="roadbook-title">
+   <div class="section-heading roadbook-heading"><div><span class="eyebrow">丹东 → 东兴 / 全程逐日总表</span><h1 id="roadbook-title" tabindex="-1">一张表，看完整趟旅程。</h1><p>每天从哪里出发、怎么开、玩什么、住哪里。日期、拆分和绕行设置会同步到这张表。</p></div><div class="roadbook-actions"><button data-download-plan>导出完整路书 CSV ↓</button><button id="print-roadbook">打印当前表 / 存为 PDF</button></div></div>
+   <div class="roadbook-toolbar"><div class="roadbook-field"><label for="roadbook-stage">按路段筛选</label><select id="roadbook-stage"><option value="all">全部路段</option></select></div><div class="roadbook-field roadbook-search"><label for="roadbook-search">搜索目的地或景点</label><div class="search-wrap"><input id="roadbook-search" type="search" placeholder="例如：喀什、然乌湖…" autocomplete="off"><button id="roadbook-clear" aria-label="清空搜索" hidden>×</button></div></div><button data-clear-filters>显示全程</button><p id="roadbook-count" role="status" aria-live="polite"></p></div>
+   <p id="roadbook-help" class="roadbook-help">表内可上下、左右滚动，表头与天数固定。点击天数查看地图和当天详情。驾驶时长不含用餐、休息、游览与检查，另留1—3小时。</p>
+   <div id="roadbook-scroll" class="roadbook-scroll" role="region" tabindex="0" aria-label="完整逐日路书表，可滚动" aria-describedby="roadbook-help">
+    <table class="roadbook-table"><caption class="sr-only">完整逐日路书，按实际出行日期排列</caption><colgroup><col class="rb-date"><col class="rb-route"><col class="rb-drive"><col class="rb-schedule"><col class="rb-sights"><col class="rb-stay"><col class="rb-notes"></colgroup><thead><tr><th scope="col">天数 / 日期</th><th scope="col">从哪里 → 到哪里</th><th scope="col">里程 / 驾驶</th><th scope="col">上午 / 下午怎么走</th><th scope="col">沿途玩什么</th><th scope="col">今晚住哪里</th><th scope="col">当天提醒 / 备选</th></tr></thead><tbody id="roadbook-body"></tbody></table>
+   </div>
+   <div class="roadbook-foot"><p id="roadbook-total"></p><p>里程、时间与住宿费均为规划估算；住宿为落脚区域建议，未预订或核实具体酒店。未分配的机动天数只计入总览与预算。</p></div>
+  </section>
+  <section id="route-view" class="view" aria-label="地图与每日行程" hidden>
    <div class="workspace">
     <aside class="ledger panel" aria-label="逐日行程选择">
      <div class="ledger-head"><h1>每日路书</h1><span id="list-count"></span></div>

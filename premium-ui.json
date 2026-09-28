@@ -1,0 +1,11 @@
+{
+  "profile": "product-admin",
+  "sourceRoots": ["dist"],
+  "locale": "zh-CN",
+  "canonicalMap": "UX-CONTRACT.md",
+  "requiredCapabilities": ["Table Selection", "Select/Listbox", "Date", "Form", "Scrollbar", "Toast"],
+  "ownership": {"Select/Listbox": "native", "Date": "native"},
+  "requiredCommands": ["data", "browser"],
+  "commands": {"data": "node verify.mjs", "browser": "node qa-roadbook.mjs"},
+  "evidence": {"failurePaths": "qa-roadbook.mjs"}
+}
