@@ -1,0 +1,9 @@
+.openai/
+.sites-runtime/
+.qa/
+qa-output/
+node_modules/
+*.tar.gz
+*.zip
+.DS_Store
+Thumbs.db

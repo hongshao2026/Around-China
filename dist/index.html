@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+ <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+ <title>沿边慢行 · 丹东到东兴自驾路书</title>
+ <meta name="description" content="单人四驱，十月从丹东出发。地图联动的331与219沿边行程，每日驾驶、住宿落脚点、冬季绕行和可调整预算。">
+ <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23224e76'/%3E%3Cpath d='M10 28V21Q10 17 16 16T22 11V4' fill='none' stroke='white' stroke-width='5'/%3E%3Ccircle cx='22' cy='5' r='4' fill='%23b44b24'/%3E%3C/svg%3E">
+ <link rel="stylesheet" href="vendor/leaflet.css"><link rel="stylesheet" href="styles.css">
+ <script defer src="vendor/leaflet.js"></script><script defer src="data.js"></script><script defer src="engine.js"></script><script defer src="app.js"></script>
+</head>
+<body>
+ <a class="skip" href="#day-detail">跳到当天行程</a>
+ <header class="topbar">
+  <a class="brand" href="#route" aria-label="沿边慢行首页"><span class="roadmark" aria-hidden="true">↝</span><span><strong>沿边慢行</strong><small>丹东出发 · 东兴抵达</small></span></a>
+  <nav aria-label="主要页面"><button data-view="route" class="nav-item active" aria-current="page">地图与行程</button><button data-view="budget" class="nav-item">旅行预算</button><button data-view="alternatives" class="nav-item">绕行备选</button><button data-view="prepare" class="nav-item">出发准备</button></nav>
+  <span class="driver-badge">1名司机 <span>／</span> 四驱</span>
+ </header>
+ <main>
+  <div class="intro"><div><span class="highway blue">G331</span><span class="join">×</span><span class="highway orange">G219</span><span class="intro-note">沿边走，累了就停。</span></div><div class="date-control"><label for="departure">出发日期</label><input id="departure" type="date" value="2026-10-01" aria-describedby="date-error"><span id="date-error" class="field-error"></span></div></div>
+  <div id="summary" class="summary" aria-label="行程总览"></div>
+  <div id="season-note" class="season-note"></div>
+  <section id="route-view" class="view" aria-label="地图与每日行程">
+   <div class="workspace">
+    <aside class="ledger panel" aria-label="逐日行程选择">
+     <div class="ledger-head"><h1>每日路书</h1><span id="list-count"></span></div>
+     <div class="ledger-controls"><label class="sr-only" for="stage-filter">按路段筛选</label><select id="stage-filter"><option value="all">全部路段</option></select><div class="search-wrap"><label class="sr-only" for="day-search">搜索目的地或景点</label><input id="day-search" type="search" placeholder="找目的地、景点…" autocomplete="off"><button id="clear-search" aria-label="清空搜索" hidden>×</button></div></div>
+     <div id="day-list" class="day-list"></div>
+     <div class="pager"><button id="page-prev" aria-label="上一页行程">‹</button><span id="page-info"></span><button id="page-next" aria-label="下一页行程">›</button></div>
+    </aside>
+    <section class="map-panel panel" aria-label="行程地理地图">
+     <div class="map-heading"><div><span class="eyebrow">THE BORDER ROADBOOK</span><h2>从江岸，到海边。</h2></div><button id="map-overview" class="small-button">查看全程</button></div>
+     <div id="map" role="region" aria-label="可缩放地图，点击停靠点查看对应行程"></div>
+     <div id="map-error" class="map-error" hidden>底图暂时未能加载。路线和每日行程仍可查看；联网后可重试。<button id="retry-map">重试底图</button></div>
+     <div class="map-legend"><span><i class="line blue-line"></i>331方向</span><span><i class="line orange-line"></i>219方向</span><span><i class="line detour-line"></i>绕行</span><span><i class="point"></i>住宿点</span></div>
+     <p class="map-caption">地图为城镇位置与途经点连线示意，<strong>不是道路轨迹或导航</strong>。公里数为独立规划估算；出发前用导航复核当天道路。</p>
+    </section>
+    <aside id="day-detail" class="detail panel" tabindex="-1" aria-label="当天行程详情"></aside>
+   </div>
+   <div class="route-foot"><p>已拆分多数长驾驶日；深冬进入新藏线仍需现场决定，延长旅行不会消除冬季风险。</p><button id="download-plan" class="text-button">下载当前逐日表 CSV ↓</button></div>
+  </section>
+  <section id="budget-view" class="view content-view" hidden aria-labelledby="budget-title">
+   <div class="section-heading"><div><span class="eyebrow">ONE PERSON · ONE CAR</span><h1 id="budget-title">把花费，也安排得明白。</h1><p>按一人、自有车辆估算。所有价格都是可调整的预算假设，不是实时报价。</p></div><div id="budget-total" class="big-total"></div></div>
+   <div class="budget-layout"><div class="panel budget-inputs"><h2>你的花费习惯</h2><form id="budget-form" novalidate></form><p class="micro">默认按燃油车计算；四驱不代表一定是油车。纯电选项仅换算费用，未核验全程充电可达性。</p></div><div class="panel budget-results"><h2>全程费用拆解</h2><div id="budget-breakdown"></div><div class="budget-note"><strong>费用边界</strong><p>含行程内每晚住宿、额外机动天数和里程余量；不含购车、租车、折旧、出发地到丹东、东兴返家、重大维修和跨境旅行。路线改变后，通行费与门票仍是你设置的整程预留额。</p></div><div id="budget-comparison"></div></div></div>
+  </section>
+  <section id="alternatives-view" class="view content-view" hidden aria-labelledby="alternatives-title">
+   <div class="section-heading"><div><span class="eyebrow">A PLAN THAT CAN CHANGE</span><h1 id="alternatives-title">路不通，就换一种走法。</h1><p>选择后自动替换相应路段，重算地图、逐日日期与费用。备选路线同样需要临行确认。</p></div></div>
+   <div id="alternative-options"></div>
+   <div class="panel waiting"><h2>等待与继续的判断</h2><div class="three-columns"><div><span class="step-number">01</span><h3>在城镇等</h3><p>留在有供暖、餐饮和燃料的城镇。不要到垭口、无人区或检查站门口等待。</p></div><div><span class="step-number">02</span><h3>确认整段通行</h3><p>问清普通小客车是否放行、限时与设备要求、下一段是否也通，以及当晚旅馆是否营业。</p></div><div><span class="step-number">03</span><h3>重新评估，不追日程</h3><p>等待2—3天仍无明确恢复信息，就评估绕行；这不是对解封时间的预测。每增加一天，日历与预算一起顺延。</p></div></div></div>
+  </section>
+  <section id="prepare-view" class="view content-view" hidden aria-labelledby="prepare-title">
+   <div class="prepare-layout"><div class="prepare-photo"><img src="road.jpg" alt="新疆群山与森林之间蜿蜒的公路" width="2200" height="1239" loading="lazy"><p>新疆公路风景示意，非本次季节路况。摄影：<a href="https://unsplash.com/photos/a-winding-road-through-a-mountain-_57f3-B8YIM" target="_blank" rel="noopener">Weichao Deng / Unsplash</a></p></div><div><span class="eyebrow">BEFORE THE NEXT DAY</span><h1 id="prepare-title">每晚，用十分钟准备明天。</h1><ul class="prep-list"><li><strong>复核导航</strong>本页里程、驾驶时长为粗估，县城中心坐标仅用于地图；按当日开放道路重核，禁止走施工便道或地图捷径。</li><li><strong>确认住宿</strong>先问整夜供暖、热水、停车和冬季营业。页面提供住宿区域与预算，没有已预订或核实在售的具体酒店。</li><li><strong>检查天气与补给</strong>查下一段及后续路段，不只查起点。偏远段先落实沿途油站、住宿；纯电车需另做充电规划。</li><li><strong>留意身体与疲劳</strong>每约1.5—2小时在安全地点休息。高海拔不适时停止上升，必要时下撤或就医；不把适应日当作保证。</li></ul></div></div>
+   <div class="three-columns prep-cards"><article class="panel"><h2>车与装备</h2><p>合适的冬季轮胎、匹配轮胎尺寸的防滑链并练习安装。检查防冻液、玻璃水、蓄电池、制动、备胎和胎压。保暖衣物、饮水、食物与离线地图随车。</p><p>四驱改善部分路面的起步与通过能力，不能替代冰面制动能力。</p></article><article class="panel"><h2>证件与联络</h2><p>身份证、驾驶证、行驶证、车辆保险。边境通行证按实际地区和有效期办理；口岸、景区进入要求单独确认。</p><p>交通服务：<a href="tel:12328">12328</a>　移民管理：<a href="tel:12367">12367</a>。进入偏远段前向可信任的人报备行程。</p></article><article class="panel"><h2>这份路书的边界</h2><p>路线是规划建议，不是实时通行信息。每天公里数通常应预留约15%偏差，冬季时长可能明显增加。休息、午饭、检查和等候不包含在驾驶时长内。</p><p>默认10月1日只是便于推演，可改为真实出发日。机动天尚未分配到具体日期，预计终点给出区间。</p></article></div>
+   <div class="panel source-panel"><h2>关键依据与临行核验</h2><p>资料核验：2026年9月28日。历史公告仅用于判断风险类别，不作为当前封路或放行结论。</p><div id="source-list"></div></div>
+  </section>
+ </main>
+ <footer><span>沿边慢行 · 为一个人的长途旅行留出余地</span><span id="save-status">设置仅保存在这台设备</span></footer>
+ <div id="live-status" role="status" aria-live="polite" class="toast"></div>
+ <noscript><p>请启用JavaScript以使用地图、逐日选择和预算计算。</p></noscript>
+</body></html>
