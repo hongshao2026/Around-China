@@ -1,6 +1,6 @@
 # 沿边慢行 interaction contract
 
-Source of business requirements: the user brief is for one driver, a four-wheel-drive vehicle, October departure, more than 90 days if needed, and accepted detours. The map is the first tab and default homepage; the complete daily roadbook is the second tab. Fuel powertrain is unspecified; the cost model defaults to an explicitly editable petrol assumption and also supports electricity. Visual identity and token ownership live in [DESIGN.md](DESIGN.md).
+Source of business requirements: the user brief is for one driver, a four-wheel-drive vehicle, October departure, more than 90 days if needed, and accepted detours. Two plans are available: Dandong to Dongxing, and Fangchenggang to Dandong. The map is the first tab and default homepage; the complete daily roadbook is the second tab. Fuel powertrain is unspecified; the cost model defaults to an explicitly editable petrol assumption and also supports electricity. Visual identity and token ownership live in [DESIGN.md](DESIGN.md).
 
 ## Canonical UI Map
 
@@ -15,10 +15,13 @@ Source of business requirements: the user brief is for one driver, a four-wheel-
 | Plan changes | `engine.js` `buildPlan` | User brief / UX-CONTRACT.md | Connected block replacement; declared midpoint split; rests at actual destination | `verify.mjs` route variants |
 | Day presentation | `app.js` `daySchedule`, `stayArea`, `lodgingRange` and `dayNotes` | UX-CONTRACT.md | Table, detail and CSV reuse the same morning/afternoon, lodging area and estimate; table and CSV use complete condition notes | Cross-view and export checks |
 | Filters | Shared stage/query state and matching in `app.js` | UX-CONTRACT.md | Map ledger and complete roadbook remain synchronized; URL stores committed scope | Filter, clear, IME and URL browser checks |
+| Plan direction | Native radios plus `engine.js` directional plan transformation | User brief / UX-CONTRACT.md | `southbound` Dandong→Dongxing; `northbound` Fangchenggang→Dandong | All route combinations, URL persistence and browser checks |
 
 ## Navigation and dataset scope
 
 Navigation order is map and day detail (`route`, default), complete roadbook (`roadbook`), budget (`budget`), alternatives (`alternatives`), and preparation (`prepare`). Valid existing hash links retain their destination, including direct `#roadbook` links. Each view has a localized page title and visible active navigation state. Opening a day from the table uses the same selection action as the map and ledger, then reveals its map/detail view. Returning to the table preserves selected day and committed filters.
+
+The direction choice is global to every view and export. The default remains Dandong to Dongxing for existing visitors. Selecting Fangchenggang to Dandong resets route choices to its documented winter recommendation: inland bypass and town-based alternatives. It selects the first day, clears stage/search filters, recalculates every date and total, updates direction-specific copy and stores `plan=northbound` in the URL. Selecting the original direction restores its highland decision baseline. Direction-specific split and rest IDs stay separate so one plan cannot attach a wait to the other plan's town.
 
 The roadbook renders every current matching day in one semantic, seven-column table without pagination: day/date; route and road; kilometres and pure driving hours; morning/afternoon; sights; lodging area and nightly estimate; conditions and available actions. Important text wraps in full. Selection controls use buttons rather than clickable table rows. Keyboard users can operate controls and the scroll frame.
 
@@ -26,7 +29,7 @@ The map ledger uses explicit **12-item pages**. Stage and committed local search
 
 ## Active plan and daily presentation
 
-Every view and export consumes the same `buildPlan` result. Actual sequential day numbers and dates come from the active plan, not from source IDs. Date-only arithmetic must remain correct across month, year and leap-day boundaries. Budget and alternatives use this same plan. Changed departure, added rest, declared splits, optional loops and route replacement recalculate subsequent dates and all relevant totals.
+Every view and export consumes the same `buildPlan` result. The Fangchenggang plan begins with Fangchenggang to Dongxing, then reverses the applicable route blocks, directions and split distances before assigning sequential dates. Actual day numbers and dates come from the active plan, not from source IDs. Date-only arithmetic must remain correct across month, year and leap-day boundaries. Budget and alternatives use this same plan. Changed direction, departure, added rest, declared splits, optional loops and route replacement recalculate subsequent dates and all relevant totals.
 
 Morning/afternoon is a suggested allocation of driving and rest time, not a verified intermediate navigation route. The existing mid-point text describes a direction or suitable stop area and must not be promoted into a precise half-way town. Driving hours exclude meals, sightseeing, stops and checks. Original rest days may include short local driving; added wait days have zero planned kilometres and driving time. Never zero all rest-day values solely because the day is labelled rest.
 
@@ -44,7 +47,7 @@ CSV exports the **entire active plan**, even while a table or ledger filter is a
 
 ## Budget and failure behavior
 
-Budget covers one traveller using their own vehicle; it excludes rental, depreciation and travel from or back to home. Day 1 starts at Dandong. Lodging counts every listed night, including arrival in Dongxing. Local sightseeing distance is already included in applicable daily estimates; an adjustable mileage allowance covers additional access and parking travel. Fixed tickets, tolls, equipment and contingency amounts remain whole-trip assumptions rather than invented daily charges. Unallocated waiting reserve increases time and recurring costs without adding imaginary driving distance.
+Budget covers one traveller using their own vehicle; it excludes rental, depreciation and travel from or back to home. Day 1 starts at Dandong in the original plan or Fangchenggang in the new plan. Lodging counts every listed night, including the arrival town. Local sightseeing distance is already included in applicable daily estimates; an adjustable mileage allowance covers additional access and parking travel. Fixed tickets, tolls, equipment and contingency amounts remain whole-trip assumptions rather than invented daily charges. Unallocated waiting reserve increases time and recurring costs without adding imaginary driving distance.
 
 External map tiles may fail; route markers, the complete table and daily text remain available. Tile failures offer retry without blocking the rest of the plan. Local-storage failure leaves the current page usable and visibly explains that persistence is unavailable. Invalid budget or date inputs display field-linked errors and preserve the last valid calculations. No live routing or current hotel-availability claims are made. External destination searches are not verified navigation itineraries.
 

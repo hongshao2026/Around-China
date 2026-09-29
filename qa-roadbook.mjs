@@ -100,6 +100,36 @@ try {
  await offline.getByRole('button',{name:'完整路书',exact:true}).click();
  assert.equal(await offline.locator('[data-roadbook-row]').count(),147);
  assert.match(await offline.locator('[data-roadbook-row]').last().innerText(),/东兴/);
+ // Second direction: Fangchenggang starts with the winter-recommended inland bypass.
+ const northContext=await browser.newContext({viewport:{width:1440,height:1100},locale:'zh-CN',reducedMotion:'reduce'});
+ const northPage=await northContext.newPage(),northErrors=[];northPage.on('pageerror',error=>northErrors.push(String(error)));
+ await northPage.goto(target,{waitUntil:'networkidle'});
+await northPage.locator('label:has(input[name=direction][value=northbound])').click();
+ assert.ok(northPage.url().includes('plan=northbound'));
+ assert.match(await northPage.locator('#summary').innerText(),/139 天/);
+ assert.match(await northPage.locator('#summary').innerText(),/预计抵达丹东/);
+ assert.match(await northPage.locator('#day-detail').innerText(),/防城港[\s\S]*东兴/);
+ assert.match(await northPage.locator('#season-note').innerText(),/默认内陆北上/);
+ await northPage.getByRole('button',{name:'完整路书',exact:true}).click();
+ assert.equal(await northPage.locator('[data-roadbook-row]').count(),139);
+ assert.match(await northPage.locator('[data-roadbook-row]').first().innerText(),/防城港[\s\S]*东兴/);
+ assert.match(await northPage.locator('[data-roadbook-row]').last().innerText(),/丹东/);
+ await northPage.getByRole('button',{name:'绕行备选',exact:true}).click();
+ assert.ok(await northPage.locator('input[name=highland][value=inland]').isChecked());
+ assert.match(await northPage.locator('#alternative-options').innerText(),/约 2026-11-23/);
+ await northPage.locator('input[name=highland][value=tibet]').check();
+ assert.match(await northPage.locator('#season-note').innerText(),/约 2026-11-12/);
+ await northPage.getByRole('button',{name:'完整路书',exact:true}).click();
+ assert.equal(await northPage.locator('[data-roadbook-row]').count(),148);
+ await northPage.reload({waitUntil:'networkidle'});
+ assert.ok(await northPage.locator('input[name=direction][value=northbound]').isChecked());
+ assert.equal(await northPage.locator('[data-roadbook-row]').count(),148);
+ await northPage.setViewportSize({width:390,height:844});
+ assert.ok(await northPage.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));
+ await northPage.screenshot({path:resolve(output,'fangchenggang-plan-mobile.png'),fullPage:true});
+ const northAxe=await new AxeBuilder({page:northPage}).withTags(['wcag2a','wcag2aa','wcag21aa']).analyze();
+ assert.deepEqual(northAxe.violations.map(v=>({id:v.id,help:v.help,nodes:v.nodes.length})),[]);
+ assert.deepEqual(northErrors,[]);await northContext.close();
  assert.deepEqual(errors,[]);
- console.log('PASS complete 147-day table; 149 days after split/rest; 140 with inland detour; dates/lodging; shared filters; reload; full CSV; no-results; keyboard; 390px mobile; PDF generation; tile failure; axe (0 violations); no JS errors.');
+ console.log('PASS Dandong plan plus Fangchenggang plan (139-day inland recommendation / 148-day plateau option); direction URL persistence; dates and winter decision copy; complete tables; CSV; keyboard; 390px mobile; PDF; tile failure; axe (0 violations); no JS errors.');
 } finally {await browser.close();}

@@ -1,11 +1,18 @@
 window.RoadEngine = (() => {
  const R = window.RB;
- const defaults = {departure:'2026-10-01',desert:'town',grassRoute:'town',northXinjiang:'town',highland:'tibet',exit:'main',kanas:false,zhaosu:false,splitIds:[],rests:{},reserve:10,budget:{fuel:10,price:8,hotel:240,food:100,tickets:4000,tolls:2500,service:5000,parking:15,extra:10,buffer:15,power:'fuel',kwh:22,electricity:1.5}};
+ const defaults = {departure:'2026-10-01',direction:'southbound',desert:'town',grassRoute:'town',northXinjiang:'town',highland:'tibet',exit:'main',kanas:false,zhaosu:false,splitIds:[],rests:{},reserve:10,budget:{fuel:10,price:8,hotel:240,food:100,tickets:4000,tolls:2500,service:5000,parking:15,extra:10,buffer:15,power:'fuel',kwh:22,electricity:1.5}};
  function isoDate(start,offset) { const date=new Date(start+'T12:00:00Z');date.setUTCDate(date.getUTCDate()+offset);return date.toISOString().slice(0,10); }
+ function reverseDay(source) {
+  const day={...source,id:'rev-'+source.id,from:source.to,to:source.from,via:[...(source.via||[])].reverse()};
+  if(source.split)day.split={...source.split,km:source.km-source.split.km,h:Math.round((source.h-source.split.h)*10)/10};
+  return day;
+ }
  function buildPlan(state) {
   const grass = state.grassRoute==='town'?[...R.grass.slice(0,10),...R.grassTown,...R.grass.slice(12)]:R.grass;
   const desertEnd=state.northXinjiang==='town'?[...R.desertEnd.slice(0,4),...R.xinjiangTown,...R.desertEnd.slice(7)]:R.desertEnd;
-  const original=[...R.ne,...grass,...(state.desert==='town'?R.townDesert:R.remoteDesert),...desertEnd,...R.xinjiang.filter(d=>!d.optional||state[d.optional]),...(state.highland==='inland'?R.inland:[...R.tibet,...(state.exit==='bing'?R.exitBing:R.exitMain)]),...R.yunnan,...R.guangxi];
+  const southbound=[...R.ne,...grass,...(state.desert==='town'?R.townDesert:R.remoteDesert),...desertEnd,...R.xinjiang.filter(d=>!d.optional||state[d.optional]),...(state.highland==='inland'?R.inland:[...R.tibet,...(state.exit==='bing'?R.exitBing:R.exitMain)]),...R.yunnan,...R.guangxi];
+  const northStart={id:'rev-start',stage:'guangxi',from:'防城港',to:'东兴',km:55,h:1.5,mid:'江山半岛方向',see:'防城港海湾、东兴口岸或竹山G219起点；当天以整备和熟悉车辆为主。',note:'从防城港城区起算，经当日导航选择开放道路到东兴；第二天开始沿G219反向北上。',road:'G228 / G219',kind:'drive',risk:'normal'};
+  const original=state.direction==='northbound'?[northStart,...southbound.slice().reverse().map(reverseDay)]:southbound;
   const result=[];
   function append(day,restKey=day.id){
    result.push(day);

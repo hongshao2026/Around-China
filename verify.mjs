@@ -106,8 +106,8 @@ const base = E.buildPlan(defaultState());
 
 function checkPlan(plan, state, label) {
   continuity(plan, label);
-  assert.equal(plan[0].from, '丹东', `${label}: wrong start`);
-  assert.equal(plan.at(-1).to, '东兴', `${label}: wrong end`);
+  assert.equal(plan[0].from, state.direction==='northbound'?'防城港':'丹东', `${label}: wrong start`);
+  assert.equal(plan.at(-1).to, state.direction==='northbound'?'丹东':'东兴', `${label}: wrong end`);
   const identifiers = new Set();
   for (const [i, day] of plan.entries()) {
     assert.ok(!identifiers.has(day.id), `${label}: duplicate id ${day.id}`);
@@ -128,26 +128,27 @@ run('date-only arithmetic across month, year, and leap boundaries', () => {
   assert.equal(E.isoDate('2028-02-28', 2), '2028-03-01');
 });
 
-run('all 128 route / excursion combinations remain connected', () => {
+run('all 256 direction / route / excursion combinations remain connected', () => {
   let combinations = 0;
-  for (const desert of ['border', 'town']) for (const highland of ['tibet', 'inland']) {
+  for (const direction of ['southbound','northbound']) for (const desert of ['border', 'town']) for (const highland of ['tibet', 'inland']) {
     for (const exit of ['main', 'bing']) for (const kanas of [false, true]) for (const zhaosu of [false, true]) {
      for (const grassRoute of ['border', 'town']) for (const northXinjiang of ['border', 'town']) {
       combinations += 1;
-      const state = { ...defaultState(), desert, highland, exit, kanas, zhaosu, grassRoute, northXinjiang };
+      const state = { ...defaultState(), direction, desert, highland, exit, kanas, zhaosu, grassRoute, northXinjiang };
       const plan = E.buildPlan(state);
       checkPlan(plan, state, `${desert}/${highland}/${exit}/${kanas}/${zhaosu}/${grassRoute}/${northXinjiang}`);
       assert.equal(plan.some(day => day.stage === 'inland'), highland === 'inland');
       assert.equal(plan.some(day => day.stage === 'tibet'), highland === 'tibet');
-      assert.equal(plan.some(day => day.to === '贾登峪'), kanas);
-      assert.equal(plan.some(day => day.to === '昭苏'), zhaosu);
-      assert.equal(plan.some(day => day.to === '乌兰察布'), desert === 'town');
-      assert.equal(plan.some(day => day.to === '霍林郭勒'), grassRoute === 'town');
-      assert.equal(plan.some(day => day.to === '宝格达山'), grassRoute === 'border');
-      assert.equal(plan.some(day => day.to === '奇台'), northXinjiang === 'town');
-      assert.equal(plan.some(day => day.to === '北塔山牧场'), northXinjiang === 'border');
+      const visits=town=>plan.some(day=>day.from===town||day.to===town);
+      assert.equal(visits('贾登峪'), kanas);
+      assert.equal(visits('昭苏'), zhaosu);
+      assert.equal(visits('乌兰察布'), desert === 'town');
+      assert.equal(visits('霍林郭勒'), grassRoute === 'town');
+      assert.equal(visits('宝格达山'), grassRoute === 'border');
+      assert.equal(visits('奇台'), northXinjiang === 'town');
+      assert.equal(visits('北塔山牧场'), northXinjiang === 'border');
       if (highland === 'inland') assert.ok(!plan.some(day => day.stage === 'exit'), 'inland bypass must omit Tibet exits');
-      else assert.equal(plan.some(day => day.to === '察瓦龙'), exit === 'bing');
+      else assert.equal(visits('察瓦龙'), exit === 'bing');
       const totals = E.totals(plan, state);
       const costs = E.budget(plan, state);
       assert.equal(totals.days, plan.length, 'scenario days must match the visible route');
@@ -157,7 +158,18 @@ run('all 128 route / excursion combinations remain connected', () => {
      }
     }
   }
-  assert.equal(combinations, 128);
+  assert.equal(combinations, 256);
+});
+
+run('northbound winter recommendation starts in Fangchenggang and ends in Dandong', () => {
+  const state={...defaultState(),direction:'northbound',highland:'inland'};
+  const plan=E.buildPlan(state);
+  assert.equal(plan[0].from,'防城港');
+  assert.equal(plan[0].to,'东兴');
+  assert.equal(plan.at(-1).to,'丹东');
+  assert.ok(!plan.some(day=>day.stage==='tibet'||day.stage==='exit'),'recommended northbound plan must skip the high plateau');
+  assert.ok(plan.some(day=>day.stage==='inland'),'recommended northbound plan must use the inland block');
+  assert.ok(plan.every((day,index)=>day.index===index+1&&day.date===E.isoDate(state.departure,index)));
 });
 
 run('optional two-day loops add exactly their own distance and time', () => {

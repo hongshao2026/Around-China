@@ -54,12 +54,25 @@
 .roadbook-foot p:first-child{flex-shrink:0;color:var(--ink)}.roadbook-foot p:last-child{max-width:720px}
 .roadbook-return{margin-top:15px;text-align:left}
 #roadbook-title{scroll-margin-top:20px}
+.plan-switch{display:grid;grid-template-columns:minmax(280px,1fr) minmax(280px,1fr);gap:10px 12px;align-items:stretch;border:0;padding:0;margin:0 0 18px}
+.plan-switch legend{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.plan-switch label{display:flex;cursor:pointer;min-width:0}
+.plan-switch input{position:absolute;opacity:0;pointer-events:none}
+.plan-switch label>span{display:grid;grid-template-columns:auto 1fr;grid-template-rows:auto auto;align-items:center;gap:2px 11px;width:100%;padding:12px 14px;border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--surface);transition:background .15s,border-color .15s,box-shadow .15s}
+.plan-switch label:hover>span{border-color:var(--primary);background:var(--pale)}
+.plan-switch input:focus-visible+span{outline:3px solid var(--primary);outline-offset:3px}
+.plan-switch input:checked+span{border-color:var(--primary);box-shadow:inset 4px 0 var(--primary);background:var(--pale)}
+.plan-switch b{grid-row:1/-1;align-self:center;color:var(--primary);font:700 12px/1.4 var(--font-data);border-right:1px solid var(--border);padding-right:12px;max-width:100px}
+.plan-switch strong{font-size:15px;line-height:1.4}.plan-switch small{font-size:12px;color:var(--muted);line-height:1.5}
+#plan-advice{grid-column:1/-1;margin:0;padding:10px 13px;border-left:3px solid var(--primary);background:var(--pale);font-size:13px;color:var(--muted)}
+#plan-advice strong{color:var(--ink)}
 @media(max-width:1050px){.roadbook-heading{display:block}.roadbook-actions{max-width:none;justify-content:flex-start;padding-top:16px}.roadbook-foot{display:block}.topbar nav{gap:15px}.nav-item{white-space:nowrap}}
 @media(max-width:720px){.topbar nav{gap:10px;justify-content:flex-start;overflow-x:auto;max-width:100%;height:48px}.nav-item{flex-shrink:0;min-height:44px}.roadbook-heading{margin-bottom:18px}.roadbook-actions{gap:8px}.roadbook-actions button{font-size:13px}.roadbook-toolbar{padding:14px;gap:12px}.roadbook-field{width:100%}.roadbook-search{width:100%}#roadbook-count{margin:0;flex:1;min-width:150px}.roadbook-scroll{height:70vh;min-height:400px}.roadbook-help,.roadbook-foot{font-size:13px}.roadbook-foot p:first-child{font-size:14px}.roadbook-table{min-width:1360px}}
+@media(max-width:720px){.plan-switch{grid-template-columns:1fr}.plan-switch label>span{padding:11px 12px}}
 @media print{
  @page{size:A4 landscape;margin:10mm}
  html,body{background:white;font-size:9pt;scroll-behavior:auto}
- main{padding:0;max-width:none}.topbar{height:auto;padding:0 0 8px;border:0}.brand{margin:0}.brand strong{font-size:18pt}.roadmark,.brand small,.driver-badge,.intro,.season-note,.skip,.roadbook-help,.roadbook-actions,.roadbook-return{display:none!important}
+ main{padding:0;max-width:none}.topbar{height:auto;padding:0 0 8px;border:0}.brand{margin:0}.brand strong{font-size:18pt}.roadmark,.brand small,.driver-badge,.intro,.plan-switch,.season-note,.skip,.roadbook-help,.roadbook-actions,.roadbook-return{display:none!important}
  .summary{gap:12px;margin-bottom:12px;padding-bottom:12px}.stat-value{font-size:18pt}.stat-value small,.stat-label,.stat-note{font-size:8pt}.stat .text-button{display:none}
  .roadbook-heading{display:block;margin-bottom:8px}.roadbook-heading h1{font-size:20pt;margin:0 0 5px}.roadbook-heading p{font-size:9pt}.roadbook-heading .eyebrow{font-size:8pt}
  .roadbook-toolbar{display:block;padding:0;border:0;margin:0 0 8px}.roadbook-toolbar .roadbook-field,.roadbook-toolbar>button{display:none!important}#roadbook-count{max-width:none;margin:0;font-size:9pt}

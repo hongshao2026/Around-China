@@ -1,7 +1,7 @@
 ---
 version: alpha
 name: 沿边慢行
-description: A Chinese road atlas and practical winter itinerary for one driver.
+description: A Chinese road atlas with two directional winter itineraries for one driver.
 colors:
   primary: "#224e76"
   ink: "#182b3c"
@@ -33,7 +33,7 @@ components:
 
 ## Overview
 
-Product register. A personal Chinese-language roadbook for one four-wheel-drive traveller leaving Dandong in October. The map workspace is the first tab and default screen. The complete daily overview is the second tab: compare the whole journey, then open a day on the map to inspect or adjust it. The signature remains an atlas-like blue northern route and burnt-orange western route, paired with numbered days. Avoid a marketing hero, travel-agency sales copy, or a false turn-by-turn map.
+Product register. A personal Chinese-language roadbook for one four-wheel-drive traveller leaving in October. It contains two explicit plans: Dandong to Dongxing, and Fangchenggang to Dandong. The map workspace is the first tab and default screen. The complete daily overview is the second tab: compare the whole journey, then open a day on the map to inspect or adjust it. The signature remains an atlas-like blue northern route and burnt-orange western route, paired with numbered days. Avoid a marketing hero, travel-agency sales copy, or a false turn-by-turn map.
 
 The overview extends the existing map, budget, alternatives and preparation screens without changing their visual identity. Runtime ownership is Model B: `dist/styles.css` remains canonical; this document mirrors accepted shared values and explains their use. There is no theme adapter, generated token layer or remote font dependency.
 
@@ -46,6 +46,8 @@ Blue denotes G331, orange G219, muted purple an actual detour. Selected days use
 Chinese sans body at 16px with comfortable line height. Recurring table content should remain readable rather than being shrunk to force all columns onto a phone. Serif is reserved for compact display titles; monospace and tabular figures distinguish day numbers, dates, mileage and prices. Full sights, lodging and condition text wraps in cells; no ellipsis or line clamp may conceal route instructions.
 
 ## Layout
+
+The direction selector sits above the shared summary. It uses two full-width route strips rather than a generic dropdown so the origin, destination and winter consequence stay visible. The active plan is identified by checked state, border, inset route line and text; color is not the only cue. On phones the strips stack without hiding either plan.
 
 The second-tab roadbook has seven columns: day/date, route, distance/driving time, morning/afternoon, sights, lodging/budget, and conditions/actions. All current matching days are rendered without pagination. The table owns a bounded scroll frame with a sticky header and sticky day column. The rest of the document scrolls naturally; table geometry must not constrain sibling forms or the shared page shell. The row count and an explanation of the current scope stay visible above the frame.
 
@@ -65,7 +67,7 @@ Borders define panels and table cells. A restrained shadow is reserved for map c
 
 ## Components
 
-Native buttons and links own actions and navigation. Native select/date popups are intentionally OS-owned. Every field has an explicit label and inline error. Route changes, day splitting and added rest days use the same state engine, recalculate totals and show a live status. Preferences are saved locally with a visible storage-failure fallback. No account or payment flow.
+Native buttons and links own actions and navigation. The plan direction uses native radio inputs with authored visible labels. Native select/date popups are intentionally OS-owned. Every field has an explicit label and inline error. Direction changes, route changes, day splitting and added rest days use the same state engine, recalculate totals and show a live status. The northbound plan defaults to the inland bypass and town-based winter alternatives. Preferences are saved locally with a visible storage-failure fallback. No account or payment flow.
 
 Global scrollbars use the existing shared thumb, track and hover tokens, with forced-colors overrides. New scroll frames inherit that baseline; only geometry such as stable gutters is table-specific. Keyboard focus is blue 3px. Disabled actions have text explanations. Reduced-motion disables transitions and map animation.
 
@@ -86,6 +88,7 @@ Token mapping is direct, with no copied theme layer:
 ## Do's and Don'ts
 
 - Do expose conditional winter segments and unverified lodging at the point of decision.
+- Do state which direction is active and where that direction reaches winter first.
 - Do recompute dates, kilometre estimates, lodging estimates and budget from the same active plan.
 - Do preserve the full roadbook in the table, printed view and complete-plan CSV.
 - Do distinguish actual itinerary days from unallocated contingency days.
